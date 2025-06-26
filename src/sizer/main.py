@@ -1,6 +1,7 @@
 import os
 from googleapiclient.discovery import build
 from sizer.download import download, download_all
+from sizer.compress import compress
 import sizer.auth as auth
 import dotenv
 
@@ -31,14 +32,18 @@ def main():
     creds = auth.auth()
     service = build("drive", "v3", credentials=creds)
     id = os.getenv("GD_ID") or exit(1)
-
-    path = download_all({
+    
+    paths = download_all({
         "id": id,
-        "name": "Peter",
-        "mimeType": "application/pdf"
+        "name": "",
+        "mimeType": ""
     }, service, filter=should_download)
 
+    path = paths[0]
+    compressed = compress(path, 3 * 1024 * 1024)
+
     print(path)
+    print(compressed)
 
 if __name__ == "__main__":
     main()
