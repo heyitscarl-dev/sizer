@@ -1,7 +1,7 @@
 import os
 from googleapiclient.discovery import build
 from sizer.download import download, download_all
-from sizer.compress import compress
+from sizer.compress import compress, compress_all
 import sizer.auth as auth
 import dotenv
 
@@ -39,10 +39,8 @@ def main():
         "mimeType": ""
     }, service, filter=should_download)
 
-    path = paths[0]
-    compressed = compress(path, 3 * 1024 * 1024)
+    compressed = compress_all(paths, 3 * 1024 * 1024)
 
-    print(path)
     print(compressed)
 
 if __name__ == "__main__":

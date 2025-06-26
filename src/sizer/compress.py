@@ -1,6 +1,9 @@
 import os
+from questionary import confirm
 from rich.console import Console
 from subprocess import run
+
+from rich.progress import Progress
 
 console = Console()
 
@@ -62,3 +65,31 @@ def compress_fixed(
     ], check=True)
 
     return dest
+
+def compress_all (
+    files: list[str],
+    threshold: int
+) -> list[str]:
+    """
+    compresses all given file paths.
+
+    returns the paths of all compressed files.
+    """
+
+    if not confirm(f"compress {len(files)} local files").ask():
+        print("alrighty then")
+        return []
+
+    paths = []
+    with Progress() as progress:
+        task = progress.add_task("compressing files", total=len(files))
+
+        for file in files:
+            progress.update(task, description=f"compressing {file}")
+            paths.append(compress(file, threshold))
+
+            progress.update(task, advance=1)
+
+        progress.update(task, description="compression complete")
+
+    return paths

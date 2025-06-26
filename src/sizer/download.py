@@ -1,11 +1,10 @@
 import io
 import os
-import shutil
 
 from typing import Callable
 
 from questionary import confirm
-from rich.progress import Progress, Task, track
+from rich.progress import Progress
 from tempfile import mkdtemp
 from googleapiclient.http import MediaIoBaseDownload
 from rich.console import Console
